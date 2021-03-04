@@ -16,5 +16,5 @@ management system: employee information, mysql db, inquirer command line interfa
 
 
 ## Link to repo
-[Repo]()
+[Repo](https://github.com/bendemic90/content-management-system)
 
