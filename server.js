@@ -93,13 +93,35 @@ const startSearch = () => {
   }
 
   roleSearch = () => {
-
+    const query = `SELECT * FROM role`
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res)
+        console.log(`--------------`)
+    })
+    startSearch()
   }
 
   depSearch = () => {
-
+    const query = `SELECT * FROM department`
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.table(res)
+        console.log(`--------------`)
+    })
+    startSearch()
   }
 
   addEmployee = () => {
 
   }
+
+  addRole = () => {
+
+  }
+
+  addDepartment = () => {
+
+  }
+
+  
