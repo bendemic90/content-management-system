@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const express = require('express');
+//const cTable = require('console.table');
 require('dotenv').config();
 
 const connection = mysql.createConnection({
@@ -33,7 +34,7 @@ const startSearch = () => {
       .prompt({
         name: 'action',
         type: 'list',
-        message: 'What would you like to do?',
+        message: '\nWhat would you like to do?',
         choices: [
           'View all employees',
           'View all roles',
@@ -48,6 +49,7 @@ const startSearch = () => {
       .then((answer) => {
         switch (answer.action) {
           case 'View all employees':
+            console.log(`\n`)
             employeeSearch();
             break;
   
@@ -87,22 +89,26 @@ const startSearch = () => {
   };
 
 employeeSearch = () => {
-    const query = `SELECT * FROM employee`
+    const query = `SELECT * FROM employee`;
     connection.query(query, (err, res) => {
-        if (err) throw err;
-        console.table(res)
-        console.log(`--------------`)
+    if (err) throw err;
+    console.log('\n')
+    console.table(res)
     })
-    startSearch()
+    console.log('\n')
+    return startSearch();
 }
+
 
 roleSearch = () => {
     const query = `SELECT * FROM role`
     connection.query(query, (err, res) => {
         if (err) throw err;
+        console.log('\n')
         console.table(res)
-        console.log(`--------------`)
+        
     })
+    console.log('\n')
     startSearch()
 }
 
@@ -110,9 +116,10 @@ depSearch = () => {
     const query = `SELECT * FROM department`
     connection.query(query, (err, res) => {
         if (err) throw err;
+        console.log('\n')
         console.table(res)
-        console.log(`--------------`)
     })
+    console.log('\n')
     startSearch()
 }
 
@@ -133,19 +140,51 @@ addEmployee = () => {
         connection.query(query, [answers.firstname, answers.surname], (err, res) => {
             if (err) throw err;
             console.log(`Added employee ${answers.firstname} ${answers.surname}.`)
-
-            startSearch()
         })
+        console.log('\n', '\n', '\n')
+        startSearch();
     })
     
 }
 
 addRole = () => {
-
+    inquirer.prompt([
+        {
+        name: 'role',
+        type: 'input',
+        message: 'What is the role you would like to add?',
+        },
+        {
+        name: 'salary',
+        type: 'input',
+        message: 'What is the base salary of this position?'
+        },
+    ]).then((answers) => {
+        const query = 'INSERT INTO role (title, salary) VALUES (?, ?)'
+        connection.query(query, [answers.role, answers.salary], (err, res) => {
+            if (err) throw err;
+            console.log(`Added role: ${answers.role}, at base rate of $${answers.salary}.`)
+        })
+        startSearch()
+    })
 }
 
 addDepartment = () => {
-
+    inquirer.prompt([
+        {
+        name: 'department',
+        type: 'input',
+        message: 'What is the name of the department you wish to add?',
+        },
+    ]).then((answers) => {
+        const query = 'INSERT INTO department (department_name) VALUES (?)'
+        connection.query(query, [answers.department], (err, res) => {
+            if (err) throw err;
+            console.log(`Added department: ${answers.department}.`)
+            console.log('\n', '\n', '\n')
+            startSearch()
+        })
+    })
 }
 
 updateRole = () => {
