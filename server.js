@@ -41,7 +41,7 @@ const startSearch = () => {
           'Add an employee',
           'Add a new role',
           'Add a new department',
-          'Update a role',
+          'Update an employees role',
           'Exit',
         ],
       })
@@ -71,6 +71,10 @@ const startSearch = () => {
             addDepartment();
             break;
 
+          case 'Update an employees role':
+            updateRole();
+            break;
+
           case 'Exit':
             connection.end();
             break;
@@ -82,7 +86,7 @@ const startSearch = () => {
       });
   };
 
-  employeeSearch = () => {
+employeeSearch = () => {
     const query = `SELECT * FROM employee`
     connection.query(query, (err, res) => {
         if (err) throw err;
@@ -90,9 +94,9 @@ const startSearch = () => {
         console.log(`--------------`)
     })
     startSearch()
-  }
+}
 
-  roleSearch = () => {
+roleSearch = () => {
     const query = `SELECT * FROM role`
     connection.query(query, (err, res) => {
         if (err) throw err;
@@ -100,9 +104,9 @@ const startSearch = () => {
         console.log(`--------------`)
     })
     startSearch()
-  }
+}
 
-  depSearch = () => {
+depSearch = () => {
     const query = `SELECT * FROM department`
     connection.query(query, (err, res) => {
         if (err) throw err;
@@ -110,18 +114,41 @@ const startSearch = () => {
         console.log(`--------------`)
     })
     startSearch()
-  }
+}
 
-  addEmployee = () => {
+addEmployee = () => {
+    inquirer.prompt([
+        {
+        name: 'firstname',
+        type: 'input',
+        message: 'What is the employees first name?',
+        },
+        {
+        name: 'surname',
+        type: 'input',
+        message: 'What is the employees surname?'
+        },
+    ]).then((answers) => {
+        const query = 'INSERT INTO employee (first_name, last_name) VALUES (?, ?)'
+        connection.query(query, [answers.firstname, answers.surname], (err, res) => {
+            if (err) throw err;
+            console.log(`Added employee ${answers.firstname} ${answers.surname}.`)
 
-  }
+            startSearch()
+        })
+    })
+    
+}
 
-  addRole = () => {
+addRole = () => {
 
-  }
+}
 
-  addDepartment = () => {
+addDepartment = () => {
 
-  }
+}
 
-  
+updateRole = () => {
+
+}
+
