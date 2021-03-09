@@ -89,7 +89,7 @@ const startSearch = () => {
   };
 
 employeeSearch = () => {
-    const query = `SELECT * FROM employee`;
+    const query = `SELECT * FROM employee INNER JOIN role ON role.id = employee.role_id`;
     connection.query(query, (err, res) => {
     if (err) throw err;
     console.log('\n')
