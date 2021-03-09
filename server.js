@@ -188,6 +188,68 @@ addDepartment = () => {
 }
 
 updateRole = () => {
-    
-}
+    const query = 'SELECT * FROM employee'
+    connection.query(query, (err, res) => {
+    const eList = [];
+    const otherList = [];
+    for (i = 0; i < res.length; i++) {
+      const empObj = {
+      id: res[i].id,
+      first_name: res[i].first_name,
+      last_name: res[i].last_name,
+      }
+      otherList.push(empObj);
+      eList.push(res[i].first_name + ' ' + res[i].last_name);
+    }
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'empChoice',
+          choices: eList,
+          message: 'Which employee will you update?'
+        }
+      ]).then((answers) => {
+        const query2 = `select * from role`
+        connection.query(query2, (err, res2) => {
+        const roles = [];
+          for (j = 0; j < res2.length; j++) {
+          roles.push(res2[j].title)
+          }
+          if (err) throw err;
+        
+          inquirer.prompt([
+            {
+              message: `To what role will you assign ${answers.empChoice}?`,
+              choices: roles,
+              type: 'list',
+              name: 'roleChoice',
+            }
+          ]).then((newRole) => {
+            
+            const g = () => {
+              for (k = 0; k < res2.length; k++) {
+                if (newRole.roleChoice === res2[k].title) {
+                  return res2[k].id;
+                }
+              }
+            }
+            
+            const h = () => {
+              for (p = 0; p < otherList.length; p++) {
+                if (answers.empChoice == (otherList[p].first_name + ' ' + otherList[p].last_name)) {
+                  return otherList[p].id;
+                }
+              }
+            }
+            const query3 = `UPDATE employee SET role_id=? WHERE id=?`;
+            connection.query(query3, [g(), h()], (err, res) => {
+              console.log(`EMPLOYEE UPDATED. GOING BACK TO MENU`)
+              startSearch();
+            })
+          })
+        })
+      })
+    })
+  }
 
