@@ -16,3 +16,5 @@ Utilising inquirer to traverse and `CRUD` a database comprising of employee info
 ## Link to repo
 [Repo](https://github.com/bendemic90/content-management-system)
 
+## Link to video
+[Video](https://drive.google.com/file/d/1BeyrIEO4-LuN5SSKLVyUP-gjIk3VrbNh/view?usp=sharing)
