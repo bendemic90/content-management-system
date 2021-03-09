@@ -42,6 +42,7 @@ const startSearch = () => {
           'Add an employee',
           'Add a new role',
           'Add a new department',
+          'View employees joined with role table',
           'Update an employees role',
           'Exit',
         ],
@@ -77,6 +78,10 @@ const startSearch = () => {
             updateRole();
             break;
 
+          case 'View employees joined with role table':
+            viewEmpRole();
+            break; 
+
           case 'Exit':
             connection.end();
             break;
@@ -89,7 +94,7 @@ const startSearch = () => {
   };
 
 employeeSearch = () => {
-    const query = `SELECT * FROM employee INNER JOIN role ON role.id = employee.role_id`;
+    const query = `SELECT * FROM employee`;
     connection.query(query, (err, res) => {
     if (err) throw err;
     console.log('\n')
@@ -99,6 +104,14 @@ employeeSearch = () => {
     return startSearch();
 }
 
+viewEmpRole = () => {
+  const query = `SELECT * FROM employee INNER JOIN role ON role.id = employee.role_id`
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    console.table(res)
+  })
+  return startSearch();
+}
 
 roleSearch = () => {
     const query = `SELECT * FROM role`
